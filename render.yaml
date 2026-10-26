@@ -1,0 +1,32 @@
+# Render Blueprint for the StudyApp API (server/). In Render: New > Blueprint, then pick
+# this repository. Values marked "sync: false" are asked for once, in the Render
+# dashboard, and are never stored in the repository.
+#
+# The free plan's disk is wiped on every deploy and restart, so the SQLite database and
+# uploads start empty each time. To keep them, switch to a paid plan, add a disk mounted
+# at /var/data, and set DATABASE_PATH=/var/data/studyapp.db and UPLOADS_PATH=/var/data/uploads.
+services:
+  - type: web
+    name: studyapp-api
+    runtime: node
+    plan: free
+    rootDir: server
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      # node:sqlite needs Node 22.13 or newer.
+      - key: NODE_VERSION
+        value: "24"
+      # The Vercel site's address, e.g. https://studyapp.vercel.app (several allowed, comma-separated).
+      - key: CLIENT_ORIGIN
+        sync: false
+      - key: AI_PROVIDER
+        value: gemini
+      - key: TRANSCRIPTION_PROVIDER
+        value: gemini
+      - key: GEMINI_API_KEY
+        sync: false
+      # Optional extra Gemini keys, comma-separated, to spread requests over (leave blank for none).
+      - key: GEMINI_BACKUP_API_KEYS
+        sync: false

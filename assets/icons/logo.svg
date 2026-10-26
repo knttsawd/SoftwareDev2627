@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="StudyApp logo">
+  <rect width="64" height="64" rx="14" fill="#4338CA"/>
+  <path d="M14 22 32 14l18 8-18 8-18-8Z" fill="#FFFFFF"/>
+  <path d="M22 27v10c0 3 4.5 6 10 6s10-3 10-6V27l-10 4.5L22 27Z" fill="#C7D2FE"/>
+  <path d="M48 23v13" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+</svg>

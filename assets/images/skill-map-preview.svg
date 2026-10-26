@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" font-family="Inter, system-ui, sans-serif">
+  <rect width="480" height="320" rx="20" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+  <text x="24" y="40" font-size="16" font-weight="700" fill="#0F172A">Biology</text>
+  <text x="24" y="60" font-size="12" fill="#475569">Your skill map</text>
+
+  <g stroke="#CBD5E1" stroke-width="3">
+    <line x1="240" y1="120" x2="120" y2="210"/>
+    <line x1="240" y1="120" x2="240" y2="230"/>
+    <line x1="240" y1="120" x2="360" y2="210"/>
+    <line x1="360" y1="210" x2="410" y2="262"/>
+  </g>
+
+  <g>
+    <circle cx="240" cy="120" r="30" fill="#15803D"/>
+    <path d="m226 120 9 9 17-18" stroke="#FFFFFF" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="240" y="76" font-size="12" font-weight="600" fill="#0F172A" text-anchor="middle">Cells: strong</text>
+  </g>
+  <g>
+    <circle cx="120" cy="210" r="26" fill="#FACC15"/>
+    <path d="M108 210h24" stroke="#0F172A" stroke-width="5" stroke-linecap="round"/>
+    <text x="120" y="256" font-size="12" font-weight="600" fill="#0F172A" text-anchor="middle">Genetics: developing</text>
+  </g>
+  <g>
+    <circle cx="240" cy="230" r="26" fill="#B91C1C"/>
+    <path d="m230 220 20 20m0-20-20 20" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"/>
+    <text x="240" y="276" font-size="12" font-weight="600" fill="#0F172A" text-anchor="middle">Evolution: needs work</text>
+  </g>
+  <g>
+    <circle cx="360" cy="210" r="26" fill="#15803D"/>
+    <path d="m347 210 8 8 15-16" stroke="#FFFFFF" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="360" y="174" font-size="12" font-weight="600" fill="#0F172A" text-anchor="middle">Ecology: strong</text>
+  </g>
+  <g>
+    <circle cx="410" cy="262" r="20" fill="#CBD5E1"/>
+    <text x="410" y="268" font-size="18" font-weight="700" fill="#0F172A" text-anchor="middle">?</text>
+    <text x="410" y="304" font-size="12" font-weight="600" fill="#0F172A" text-anchor="middle">Food webs: not tested</text>
+  </g>
+</svg>
