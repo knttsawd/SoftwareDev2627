@@ -10,6 +10,11 @@ export const DEFAULT_CLIENT_ORIGIN = 'http://localhost:5173';
 export const DEFAULT_DATABASE_PATH = path.join(SERVER_ROOT, 'data', 'studyapp.db');
 export const DEFAULT_UPLOADS_PATH = path.join(SERVER_ROOT, 'data', 'uploads');
 export const IN_MEMORY_DATABASE = ':memory:';
+<<<<<<< Updated upstream
+=======
+// The built website (npm run build). When it exists, the server serves it too.
+export const CLIENT_BUILD_PATH = path.join(SERVER_ROOT, '..', 'client', 'dist');
+>>>>>>> Stashed changes
 
 export const API_PREFIX = '/api';
 export const JSON_BODY_LIMIT = '1mb';

@@ -1,4 +1,8 @@
 import { create_app } from './app.js';
+<<<<<<< Updated upstream
+=======
+import { CLIENT_BUILD_PATH } from './config/constants.js';
+>>>>>>> Stashed changes
 import { open_database } from './db/database.js';
 import { create_ai_provider, create_transcriber } from './services/ai/ai_providers.js';
 import { create_chat_assistants } from './services/ai/chat_assistants.js';
@@ -15,6 +19,10 @@ export function start_server(env) {
     ai_provider,
     transcriber,
     chat_assistants: create_chat_assistants(env.ai),
+<<<<<<< Updated upstream
+=======
+    client_build_path: CLIENT_BUILD_PATH,
+>>>>>>> Stashed changes
   });
   return app.listen(env.port, function announce_listening() {
     console.log(

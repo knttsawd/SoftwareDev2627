@@ -1,3 +1,8 @@
+<<<<<<< Updated upstream
+=======
+import { existsSync } from 'node:fs';
+import path from 'node:path';
+>>>>>>> Stashed changes
 import cors from 'cors';
 import express from 'express';
 import { API_PREFIX, JSON_BODY_LIMIT } from './config/constants.js';
@@ -37,6 +42,11 @@ import { create_resource_importer } from './services/resource_importer.js';
 //   transcriber   { name, transcribe } for audio and video
 //   chat_assistants  the choice of AIs that can run the assistant (services/ai/chat_assistants.js);
 //                 practice mode only if left out
+<<<<<<< Updated upstream
+=======
+//   client_build_path  the built website (client/dist), served from the same address if
+//                 the folder exists; leave out for an API-only server
+>>>>>>> Stashed changes
 export function create_app({
   database,
   uploads_path,
@@ -44,6 +54,10 @@ export function create_app({
   ai_provider,
   transcriber,
   chat_assistants = create_chat_assistants({ provider: 'mock' }),
+<<<<<<< Updated upstream
+=======
+  client_build_path,
+>>>>>>> Stashed changes
 }) {
   const app = express();
   const require_auth = create_require_auth(database);
@@ -74,7 +88,27 @@ export function create_app({
   app.use(`${API_PREFIX}/widget-stacks`, require_auth, create_widget_stack_router({ database }));
   app.use(`${API_PREFIX}/ai`, require_auth, create_ai_router({ ai_provider, transcriber }));
 
+<<<<<<< Updated upstream
+=======
+  if (client_build_path && existsSync(client_build_path)) serve_client(app, client_build_path);
+
+>>>>>>> Stashed changes
   app.use(handle_not_found);
   app.use(handle_errors);
   return app;
 }
+<<<<<<< Updated upstream
+=======
+
+// Serves the built website's files. Any other GET outside /api gets index.html so the
+// React router can show the page, and refreshing /dashboard/progress works (the same
+// rewrite client/vercel.json does on Vercel).
+function serve_client(app, client_build_path) {
+  const index_path = path.join(client_build_path, 'index.html');
+  app.use(express.static(client_build_path));
+  app.use(function send_client_page(req, res, next) {
+    if (req.method !== 'GET' || req.path.startsWith(API_PREFIX)) return next();
+    return res.sendFile(index_path);
+  });
+}
+>>>>>>> Stashed changes

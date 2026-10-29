@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 import { mkdtempSync, rmSync } from 'node:fs';
+=======
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+>>>>>>> Stashed changes
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import request from 'supertest';
@@ -48,6 +52,41 @@ describe('unknown routes', () => {
   });
 });
 
+<<<<<<< Updated upstream
+=======
+describe('the built website', () => {
+  let client_build_path;
+
+  beforeEach(() => {
+    client_build_path = mkdtempSync(path.join(tmpdir(), 'studyapp-client-'));
+    writeFileSync(path.join(client_build_path, 'index.html'), '<div id="root"></div>');
+    writeFileSync(path.join(client_build_path, 'app.js'), 'console.log("app");');
+  });
+
+  afterEach(() => {
+    rmSync(client_build_path, { recursive: true, force: true });
+  });
+
+  it('serves its files, sends index.html for page paths and leaves /api alone', async () => {
+    const site_app = create_app({
+      database: open_database(IN_MEMORY_DATABASE),
+      uploads_path,
+      client_origin: CLIENT_ORIGIN,
+      client_build_path,
+    });
+
+    const file_response = await request(site_app).get('/app.js');
+    const page_response = await request(site_app).get('/dashboard/progress');
+    const api_response = await request(site_app).get('/api/missing');
+
+    expect(file_response.text).toBe('console.log("app");');
+    expect(page_response.text).toBe('<div id="root"></div>');
+    expect(api_response.status).toBe(404);
+    expect(api_response.body.error).toMatch('/api/missing');
+  });
+});
+
+>>>>>>> Stashed changes
 describe('GET /api/auth/check-username', () => {
   it('reports whether the username is free', async () => {
     const before_signup = await request(app).get('/api/auth/check-username').query({ username: 'study_sam' });

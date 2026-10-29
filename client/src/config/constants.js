@@ -2,7 +2,13 @@
 
 export const APP_NAME = 'StudyApp';
 
+<<<<<<< Updated upstream
 export const DEFAULT_API_BASE_URL = 'http://localhost:4000/api';
+=======
+// A production build is served by the API server itself (server/app.js), so it calls the
+// API on whatever address the site was opened at.
+export const DEFAULT_API_BASE_URL = import.meta.env.DEV ? 'http://localhost:4000/api' : '/api';
+>>>>>>> Stashed changes
 export const API_BASE_URL = import.meta.env.VITE_API_URL || DEFAULT_API_BASE_URL;
 
 export const SESSION_TOKEN_STORAGE_KEY = 'studyapp_session_token';

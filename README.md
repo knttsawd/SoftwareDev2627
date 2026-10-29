@@ -1916,3 +1916,18 @@ The API goes on **Render** and the website on **Vercel**. Both read their settin
 - **Secrets** are set in the Render and Vercel dashboards only. `VITE_API_URL` is not secret: it ends up in the website's code.
 - **Logins** use a token in the browser's storage sent in a header, not cookies, so the two sites being on different domains needs no extra setup.
 - Pushing to GitHub redeploys both automatically.
+<<<<<<< Updated upstream
+=======
+
+### One server over plain HTTP
+
+To host on your own machine or server instead, the API serves the website too, so there's one address and no CORS or `VITE_API_URL` to set:
+
+```bash
+npm run install:all
+npm run build        # builds client/dist
+npm start            # serves the site and the API on :4000 (PORT changes it)
+```
+
+Open `http://<server-address>:4000`. A build made without `VITE_API_URL` calls `/api` on whatever address it was opened from, so the same build works on `localhost`, a LAN IP or a domain. Run `npm run build` again after client changes. On Windows, allow Node through the firewall the first time so other devices can connect. Plain HTTP sends logins unencrypted, so for anything beyond a local network, put it behind HTTPS (for example a reverse proxy such as Caddy).
+>>>>>>> Stashed changes
