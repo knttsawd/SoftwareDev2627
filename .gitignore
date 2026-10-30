@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+
+# Secrets: only the .env.example templates are committed
+.env
+.env.*
+!.env.example
+
+# Local database and uploaded files (created when the server first runs)
+server/data/
+*.db
+*.db-journal
+
+# Build and test output
+dist/
+coverage/
+*.log
+
+# Large files (GitHub rejects files over 100 MB; keep big media out of the repo)
+*.mp4
+*.mov
+*.mkv
+*.avi
+*.wav
+*.zip
+*.7z
+*.tar.gz
+*.iso
+
+# Editor and OS files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

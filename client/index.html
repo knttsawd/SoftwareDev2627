@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="StudyApp turns your own notes, PDFs, videos and articles into study notes, quizzes and a study plan." />
+    <link rel="icon" type="image/svg+xml" href="/icons/logo.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@500;600;700&display=swap"
+    />
+    <title>StudyApp</title>
+    <script>
+      // Sets light or dark mode before the page first draws, so a dark page never flashes
+      // light. The same steps as utils/theme.js, with the key THEME_STORAGE_KEY.
+      (function () {
+        var choice = null;
+        try {
+          choice = localStorage.getItem('studyapp_theme');
+        } catch (error) {
+          choice = null;
+        }
+        var is_dark = choice === 'dark' || (choice !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.dataset.theme = is_dark ? 'dark' : 'light';
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

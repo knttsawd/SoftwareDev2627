@@ -1,0 +1,335 @@
+@import 'tailwindcss';
+
+/*
+  StudyApp style guide. Every color, font and font size the app uses is a token here,
+  and Tailwind turns each one into utilities (e.g. --color-brand-600 -> bg-brand-600,
+  --text-heading-1 -> text-heading-1). Change a value here and it changes everywhere.
+
+  Contrast: text pairs listed beside each color meet WCAG AA (4.5:1) for normal text.
+
+  Dark mode: <html data-theme="dark"> (set by utils/theme.js) swaps the values below for the
+  dark set further down, so every utility follows. The "fixed" tokens keep one value in
+  both themes because white or dark text sits on them.
+*/
+@theme {
+  /* Brand: indigo. White text on brand-600 or darker. */
+  --color-brand-50: #eef2ff;
+  --color-brand-100: #e0e7ff;
+  --color-brand-200: #c7d2fe;
+  --color-brand-500: #6366f1;
+  --color-brand-600: #4f46e5;
+  --color-brand-700: #4338ca;
+  --color-brand-800: #3730a3;
+  /* Fixed: the hover color of buttons with white text. */
+  --color-brand-deep: #4338ca;
+  /* The keyboard focus ring. */
+  --color-focus: #4f46e5;
+
+  /* Accent: teal, for secondary actions and highlights. White text on accent-600 or darker. */
+  --color-accent-50: #f0fdfa;
+  --color-accent-600: #0d9488;
+  --color-accent-700: #0f766e;
+
+  /* Neutrals: page, cards, borders and text. ink on canvas/surface is 17:1, ink-muted is 7.5:1. */
+  --color-canvas: #f8fafc;
+  --color-surface: #ffffff;
+  --color-border: #e2e8f0;
+  --color-ink: #0f172a;
+  --color-ink-muted: #475569;
+
+  /* Feedback states. White text on each; the -soft backgrounds take the matching color as text. */
+  --color-success: #15803d;
+  --color-success-soft: #f0fdf4;
+  --color-warning: #b45309;
+  --color-danger: #b91c1c;
+  --color-danger-soft: #fef2f2;
+  /* Fixed: the red behind white text on "Delete" buttons. */
+  --color-danger-solid: #b91c1c;
+
+  /* Fixed: dark text on light fills that stay light in both themes, and popup backdrops. */
+  --color-ink-on-light: #0f172a;
+  --color-backdrop: #0f172a;
+
+  /*
+    Skill map understanding levels. Always shown with an icon and label as well as the color.
+    strong/weak: white text. developing/untested: ink text.
+  */
+  --color-mastery-strong: #15803d;
+  --color-mastery-developing: #facc15;
+  --color-mastery-weak: #b91c1c;
+  --color-mastery-untested: #cbd5e1;
+
+  /* Fonts: Lexend for headings (built for reading ease), Inter for body text. */
+  --font-display: 'Lexend', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  /* Font sizes, each with a matching line height. */
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1rem;
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.25rem;
+  --text-body: 1rem;
+  --text-body--line-height: 1.5rem;
+  --text-lead: 1.125rem;
+  --text-lead--line-height: 1.75rem;
+  --text-heading-3: 1.25rem;
+  --text-heading-3--line-height: 1.75rem;
+  --text-heading-2: 1.5rem;
+  --text-heading-2--line-height: 2rem;
+  --text-heading-1: 2rem;
+  --text-heading-1--line-height: 2.5rem;
+  --text-display: 2.75rem;
+  --text-display--line-height: 3.25rem;
+
+  /* Widgets' menus and new floating windows open with a small, quick pop. */
+  --animate-widget-pop: widget-pop 160ms ease-out;
+  @keyframes widget-pop {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+
+  /* The thin bar that runs across the top while moving between dashboard pages. */
+  --animate-page-progress: page-progress 600ms ease-out forwards;
+  @keyframes page-progress {
+    from {
+      width: 0;
+    }
+    80% {
+      width: 85%;
+      opacity: 1;
+    }
+    to {
+      width: 100%;
+      opacity: 0;
+    }
+  }
+}
+
+/*
+  The dark set. Text pairs: ink on canvas/surface is 14:1 or more, ink-muted 9:1, brand-700
+  and accent-700 links 8:1 on surface. brand-600 stays the same indigo, so white text on
+  buttons keeps 6.3:1.
+*/
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --color-brand-50: #1e1b4b;
+  --color-brand-100: #312e81;
+  --color-brand-200: #4338ca;
+  --color-brand-500: #818cf8;
+  --color-brand-700: #a5b4fc;
+  --color-brand-800: #c7d2fe;
+  --color-focus: #a5b4fc;
+  --color-accent-50: #042f2e;
+  --color-accent-700: #5eead4;
+  --color-canvas: #0f172a;
+  --color-surface: #1e293b;
+  --color-border: #334155;
+  --color-ink: #f1f5f9;
+  --color-ink-muted: #cbd5e1;
+  --color-success: #4ade80;
+  --color-success-soft: #052e16;
+  --color-warning: #fbbf24;
+  --color-danger: #fca5a5;
+  --color-danger-soft: #450a0a;
+}
+
+/*
+  Widget accents (data-accent on a widget): the dot by its title, the tint of a "tinted"
+  widget, and its swatch in the menu. Text never uses them, so contrast doesn't depend on
+  them. Dark mode uses lighter steps of the same hues.
+*/
+[data-accent='indigo'] { --widget-accent: #4f46e5; }
+[data-accent='teal'] { --widget-accent: #0d9488; }
+[data-accent='sky'] { --widget-accent: #0284c7; }
+[data-accent='green'] { --widget-accent: #16a34a; }
+[data-accent='amber'] { --widget-accent: #d97706; }
+[data-accent='rose'] { --widget-accent: #e11d48; }
+[data-accent='slate'] { --widget-accent: #64748b; }
+:root[data-theme='dark'] [data-accent='indigo'] { --widget-accent: #818cf8; }
+:root[data-theme='dark'] [data-accent='teal'] { --widget-accent: #2dd4bf; }
+:root[data-theme='dark'] [data-accent='sky'] { --widget-accent: #38bdf8; }
+:root[data-theme='dark'] [data-accent='green'] { --widget-accent: #4ade80; }
+:root[data-theme='dark'] [data-accent='amber'] { --widget-accent: #fbbf24; }
+:root[data-theme='dark'] [data-accent='rose'] { --widget-accent: #fb7185; }
+:root[data-theme='dark'] [data-accent='slate'] { --widget-accent: #94a3b8; }
+
+/*
+  Inside a widget, soft panels (tiles, tracks, buttons) and their outlines follow the
+  widget's look (data-appearance): opaque on solid widgets, see-through on glass ones so
+  the frosting shows, and a touch of the accent on tinted ones.
+*/
+:root {
+  --widget-soft: var(--color-canvas);
+  --widget-line: var(--color-border);
+}
+[data-appearance='glass'] {
+  --widget-soft: rgb(255 255 255 / 0.4);
+  --widget-line: rgb(15 23 42 / 0.09);
+}
+:root[data-theme='dark'] [data-appearance='glass'] {
+  --widget-soft: rgb(255 255 255 / 0.06);
+  --widget-line: rgb(255 255 255 / 0.11);
+}
+[data-appearance='tinted'] {
+  --widget-soft: color-mix(in oklab, var(--widget-accent) 7%, var(--color-surface));
+  --widget-line: color-mix(in oklab, var(--widget-accent) 22%, var(--color-border));
+}
+
+/*
+  Shadows (data-shadow on a window: none, soft or deep), deeper for floating windows and for
+  a docked window being dragged (data-lifted). Kept as --widget-shadow so glass can add its
+  edge line. These rules sit outside Tailwind's layers, so they win over its utilities.
+*/
+.widget-window {
+  --widget-shadow: 0 0 #0000;
+  box-shadow: var(--widget-shadow);
+}
+.widget-window[data-shadow='soft'] {
+  --widget-shadow: 0 1px 2px rgb(15 23 42 / 0.06), 0 6px 16px -8px rgb(15 23 42 / 0.14);
+}
+.widget-window[data-shadow='deep'],
+.widget-window[data-shadow='soft'][data-placement='floating'] {
+  --widget-shadow: 0 2px 6px rgb(15 23 42 / 0.08), 0 24px 56px -18px rgb(15 23 42 / 0.42);
+}
+.widget-window[data-shadow='deep'][data-placement='floating'],
+.widget-window[data-lifted] {
+  --widget-shadow: 0 4px 10px rgb(15 23 42 / 0.1), 0 34px 80px -20px rgb(15 23 42 / 0.55);
+}
+:root[data-theme='dark'] .widget-window[data-shadow='soft'] {
+  --widget-shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 20px -8px rgb(0 0 0 / 0.5);
+}
+:root[data-theme='dark'] .widget-window[data-shadow='deep'],
+:root[data-theme='dark'] .widget-window[data-shadow='soft'][data-placement='floating'] {
+  --widget-shadow: 0 2px 6px rgb(0 0 0 / 0.35), 0 24px 56px -16px rgb(0 0 0 / 0.75);
+}
+:root[data-theme='dark'] .widget-window[data-shadow='deep'][data-placement='floating'],
+:root[data-theme='dark'] .widget-window[data-lifted] {
+  --widget-shadow: 0 4px 10px rgb(0 0 0 / 0.4), 0 34px 80px -20px rgb(0 0 0 / 0.85);
+}
+
+/* Tinted widgets: the accent mixed into the surface at the widget's tint strength. */
+.widget-tinted {
+  background-color: color-mix(in oklab, var(--widget-accent) var(--widget-tint, 10%), var(--color-surface));
+  border-color: color-mix(in oklab, var(--widget-accent) calc(var(--widget-tint, 10%) * 2 + 10%), var(--color-border));
+}
+
+/*
+  Glass widgets: clear glass over the page. What's behind shows through at its own colours,
+  frosted as much as the widget's settings say: --glass-fill is its tint (neutral or the
+  accent) at its opacity, and --glass-filter its frost and colour boost (build_look_style).
+  In Chromium browsers the page also bends at the edges like light through thick glass
+  (GlassRefraction.jsx sets the pane's backdrop-filter to an SVG filter plus the same
+  frost, which wins over the one here).
+  The frosting is its own layer, .widget-glass-pane, behind the window's content (the window
+  isolates, so z-index -1 keeps the pane inside it): Chromium would otherwise frost the
+  window's own content too when it holds an app's frame. Faint inner shadows give the pane
+  thickness without colouring it. The rim (.widget-glass-rim, its own element, since the
+  window's ::before and ::after mark drops) catches the light: bright top left, faint
+  middle, a softer glint bottom right. A hairline outside keeps the edge visible on a plain
+  background.
+*/
+.widget-glass {
+  isolation: isolate;
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow:
+    0 0 0 1px rgb(15 23 42 / 0.07),
+    var(--widget-shadow);
+}
+.widget-glass-pane {
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background-color: var(--glass-fill);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  box-shadow:
+    inset 0 1px 1px rgb(255 255 255 / 0.55),
+    inset 0 -1px 1px rgb(15 23 42 / 0.05);
+}
+.widget-glass-rim {
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1.5px;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgb(255 255 255 / 0.95),
+    rgb(255 255 255 / 0.25) 28%,
+    rgb(255 255 255 / 0.06) 52%,
+    rgb(255 255 255 / 0.18) 78%,
+    rgb(255 255 255 / 0.7)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+:root[data-theme='dark'] .widget-glass {
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 0.35),
+    var(--widget-shadow);
+}
+:root[data-theme='dark'] .widget-glass-pane {
+  box-shadow: inset 0 1px 1px rgb(255 255 255 / 0.14);
+}
+:root[data-theme='dark'] .widget-glass-rim {
+  background: linear-gradient(
+    135deg,
+    rgb(255 255 255 / 0.45),
+    rgb(255 255 255 / 0.1) 28%,
+    rgb(255 255 255 / 0.03) 52%,
+    rgb(255 255 255 / 0.08) 78%,
+    rgb(255 255 255 / 0.3)
+  );
+}
+
+/* While anything is being dragged (use_pointer_drag), frames don't take the pointer and
+   text isn't selected. */
+body[data-dragging] {
+  user-select: none;
+}
+body[data-dragging] iframe {
+  pointer-events: none;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+  }
+
+  /* A clear focus ring on everything keyboard users can reach. */
+  :focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  /* Students who ask their device for reduced motion get instant changes: arrows still
+     turn and map nodes still grow, just without the animation in between. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
