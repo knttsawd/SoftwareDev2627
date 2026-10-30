@@ -1,5 +1,11 @@
 import { Router } from 'express';
-import { HTTP_STATUS } from '../config/constants.js';
+import {
+  AUTH_LIMIT_WINDOW_MS,
+  AUTH_REQUESTS_PER_ADDRESS,
+  HTTP_STATUS,
+  LOGIN_ATTEMPTS_PER_ACCOUNT,
+} from '../config/constants.js';
+import { create_rate_limit, request_address } from '../middleware/rate_limit.js';
 import { authenticate, create_account, is_username_taken } from '../services/account_service.js';
 import { validate_login_input, validate_signup_input, validate_username } from '../services/account_validators.js';
 import { assert_no_field_errors, create_http_error } from '../services/http_error.js';
@@ -7,8 +13,19 @@ import { create_session, delete_session } from '../services/session_service.js';
 
 // Sign-up, login and logout. Sign-up and login both answer { token, account }; the client
 // keeps the token and sends it as "Authorization: Bearer <token>" from then on.
+// Sign-up and login are rate limited (see AUTH_LIMIT_WINDOW_MS) so passwords can't be guessed
+// quickly; login also counts tries per email, so one account can't be targeted.
 export function create_auth_router(database, require_auth) {
   const auth_router = Router();
+  const limit_per_address = create_rate_limit({
+    max_requests: AUTH_REQUESTS_PER_ADDRESS,
+    window_ms: AUTH_LIMIT_WINDOW_MS,
+  });
+  const limit_per_account = create_rate_limit({
+    max_requests: LOGIN_ATTEMPTS_PER_ACCOUNT,
+    window_ms: AUTH_LIMIT_WINDOW_MS,
+    key_for: (req) => `${request_address(req)} ${String(req.body?.email ?? '').trim().toLowerCase()}`,
+  });
 
   // GET /api/auth/check-username?username=sam -> { is_available }
   auth_router.get('/check-username', function check_username(req, res) {
@@ -19,7 +36,7 @@ export function create_auth_router(database, require_auth) {
   });
 
   // POST /api/auth/signup { username, password, email, first_name, last_name } -> 201 { token, account }
-  auth_router.post('/signup', async function sign_up(req, res) {
+  auth_router.post('/signup', limit_per_address, async function sign_up(req, res) {
     const { field_errors, values } = validate_signup_input(req.body);
     assert_no_field_errors(field_errors);
 
@@ -28,7 +45,7 @@ export function create_auth_router(database, require_auth) {
   });
 
   // POST /api/auth/login { email, password } -> { token, account }
-  auth_router.post('/login', async function log_in(req, res) {
+  auth_router.post('/login', limit_per_address, limit_per_account, async function log_in(req, res) {
     const { field_errors, values } = validate_login_input(req.body);
     assert_no_field_errors(field_errors);
 

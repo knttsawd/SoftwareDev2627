@@ -1916,8 +1916,6 @@ The API goes on **Render** and the website on **Vercel**. Both read their settin
 - **Secrets** are set in the Render and Vercel dashboards only. `VITE_API_URL` is not secret: it ends up in the website's code.
 - **Logins** use a token in the browser's storage sent in a header, not cookies, so the two sites being on different domains needs no extra setup.
 - Pushing to GitHub redeploys both automatically.
-<<<<<<< Updated upstream
-=======
 
 ### One server over plain HTTP
 
@@ -1929,5 +1927,24 @@ npm run build        # builds client/dist
 npm start            # serves the site and the API on :4000 (PORT changes it)
 ```
 
-Open `http://<server-address>:4000`. A build made without `VITE_API_URL` calls `/api` on whatever address it was opened from, so the same build works on `localhost`, a LAN IP or a domain. Run `npm run build` again after client changes. On Windows, allow Node through the firewall the first time so other devices can connect. Plain HTTP sends logins unencrypted, so for anything beyond a local network, put it behind HTTPS (for example a reverse proxy such as Caddy).
->>>>>>> Stashed changes
+Open `http://<server-address>:4000`. A build made without `VITE_API_URL` calls `/api` on whatever address it was opened from, so the same build works on `localhost`, a LAN IP or a domain. Run `npm run build` again after client changes. `npm start` reads `server/.env`. On Windows, allow Node through the firewall the first time so other devices can connect. Plain HTTP sends logins unencrypted, so for anything beyond a local network, put it behind HTTPS (for example a reverse proxy such as Caddy).
+
+### Windows Server VM on port 80 (Azure)
+
+[deploy/windows/install.ps1](deploy/windows/install.ps1) sets everything up as a Windows service that starts with Windows and restarts if it crashes ([WinSW](https://github.com/winsw/winsw), configured by [studyapp-service.xml](deploy/windows/studyapp-service.xml)).
+
+1. On the VM, install **Node.js 24 LTS** from nodejs.org (keep the default folder) and copy the project there, without `node_modules`, `dist` or `server/data`.
+2. In PowerShell **as Administrator**, from the project folder:
+   ```powershell
+   powershell -ExecutionPolicy Bypass -File deploy\windows\install.ps1
+   ```
+   It installs packages, builds the website, creates `server\.env` (port 80, data in `C:\StudyAppData`) if there isn't one, installs and starts the service, opens port 80 in Windows Firewall, and checks `/api/health`.
+3. Once, in the Azure portal: **VM → Networking → Add inbound port rule**, TCP **80**, Allow.
+4. Open `http://<vm-public-ip>`.
+
+- **Updating:** copy in the new code (leave `server\.env` alone) and run the script again. It rebuilds and restarts the service.
+- **Settings** such as AI keys go in `server\.env`; then restart with `Restart-Service studyapp`.
+- **Data** lives in `C:\StudyAppData` (outside the project, so replacing the code never touches it). To back it up, stop the service and copy that folder.
+- **Logs** are in `deploy\windows\logs`. Stop/start with `Stop-Service studyapp` / `Start-Service studyapp`.
+- **Port 80 taken:** the script names the program using it. On Windows Server it's usually IIS: `Stop-Service W3SVC; Set-Service W3SVC -StartupType Disabled`.
+- **Login limits:** after 10 tries for one email (or 100 logins and sign-ups from one address) in 15 minutes, the server answers "Too many attempts" until the 15 minutes are up. The numbers are in [server/config/constants.js](server/config/constants.js).

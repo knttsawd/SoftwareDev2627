@@ -5,16 +5,13 @@ import path from 'node:path';
 
 const SERVER_ROOT = path.join(import.meta.dirname, '..');
 
-export const DEFAULT_PORT = 4000;
+export const DEFAULT_PORT = 80;
 export const DEFAULT_CLIENT_ORIGIN = 'http://localhost:5173';
 export const DEFAULT_DATABASE_PATH = path.join(SERVER_ROOT, 'data', 'studyapp.db');
 export const DEFAULT_UPLOADS_PATH = path.join(SERVER_ROOT, 'data', 'uploads');
 export const IN_MEMORY_DATABASE = ':memory:';
-<<<<<<< Updated upstream
-=======
 // The built website (npm run build). When it exists, the server serves it too.
 export const CLIENT_BUILD_PATH = path.join(SERVER_ROOT, '..', 'client', 'dist');
->>>>>>> Stashed changes
 
 export const API_PREFIX = '/api';
 export const JSON_BODY_LIMIT = '1mb';
@@ -31,6 +28,7 @@ export const HTTP_STATUS = {
   conflict: 409,
   payload_too_large: 413,
   unprocessable: 422,
+  too_many_requests: 429,
   server_error: 500,
   bad_gateway: 502,
   service_unavailable: 503,
@@ -49,6 +47,17 @@ export const PASSWORD_KEY_LENGTH = 64;
 export const SESSION_TOKEN_BYTES = 32;
 export const SESSION_LIFETIME_DAYS = 30;
 export const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
+// Limits on logging in and signing up, so passwords can't be guessed quickly. Counted per
+// network address in a window of AUTH_LIMIT_WINDOW_MS. A whole class behind one school
+// address shares AUTH_REQUESTS_PER_ADDRESS; LOGIN_ATTEMPTS_PER_ACCOUNT is per email too.
+export const AUTH_LIMIT_WINDOW_MS = 15 * 60 * 1000;
+export const AUTH_REQUESTS_PER_ADDRESS = 100;
+export const LOGIN_ATTEMPTS_PER_ACCOUNT = 10;
+
+// How long a stopping server waits for requests in progress (an AI reply can take a while)
+// before it exits anyway.
+export const SHUTDOWN_TIMEOUT_MS = 10_000;
 
 // Skills
 export const SKILL_NAME_MAX_LENGTH = 80;

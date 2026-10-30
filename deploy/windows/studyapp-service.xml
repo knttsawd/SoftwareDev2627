@@ -1,0 +1,29 @@
+<!--
+  Runs StudyApp as a Windows service with WinSW (https://github.com/winsw/winsw, v2).
+  install.ps1 downloads WinSW next to this file as studyapp-service.exe and installs it.
+  The service starts with Windows, restarts if it crashes, and logs to the logs folder here.
+  Settings (port, AI keys, where data is kept) live in server\.env, not here.
+-->
+<service>
+  <id>studyapp</id>
+  <name>StudyApp</name>
+  <description>StudyApp website and API (server\index.js)</description>
+
+  <!-- The full path, because a service doesn't see PATH changes until Windows restarts. -->
+  <executable>%ProgramFiles%\nodejs\node.exe</executable>
+  <arguments>--env-file-if-exists=.env index.js</arguments>
+  <workingdirectory>%BASE%\..\..\server</workingdirectory>
+  <env name="NODE_ENV" value="production" />
+
+  <startmode>Automatic</startmode>
+  <onfailure action="restart" delay="10 sec" />
+  <resetfailure>1 hour</resetfailure>
+  <!-- Stopping sends Ctrl+C, so requests in progress can finish (see server\index.js). -->
+  <stoptimeout>15 sec</stoptimeout>
+
+  <logpath>%BASE%\logs</logpath>
+  <log mode="roll-by-size">
+    <sizeThreshold>10240</sizeThreshold>
+    <keepFiles>5</keepFiles>
+  </log>
+</service>

@@ -11,6 +11,10 @@ server/data/
 *.db
 *.db-journal
 
+# Windows service wrapper and its logs (deploy/windows/install.ps1 downloads and creates them)
+deploy/windows/*.exe
+deploy/windows/logs/
+
 # Build and test output
 dist/
 coverage/

@@ -1,8 +1,5 @@
 import { create_app } from './app.js';
-<<<<<<< Updated upstream
-=======
 import { CLIENT_BUILD_PATH } from './config/constants.js';
->>>>>>> Stashed changes
 import { open_database } from './db/database.js';
 import { create_ai_provider, create_transcriber } from './services/ai/ai_providers.js';
 import { create_chat_assistants } from './services/ai/chat_assistants.js';
@@ -19,12 +16,11 @@ export function start_server(env) {
     ai_provider,
     transcriber,
     chat_assistants: create_chat_assistants(env.ai),
-<<<<<<< Updated upstream
-=======
     client_build_path: CLIENT_BUILD_PATH,
->>>>>>> Stashed changes
   });
-  return app.listen(env.port, function announce_listening() {
+  // Express 5 also calls this when listening fails; index.js reports that error instead.
+  return app.listen(env.port, function announce_listening(listen_error) {
+    if (listen_error) return;
     console.log(
       `StudyApp server listening on port ${env.port} (database: ${env.database_path}, AI: ${ai_provider.name}, transcription: ${transcriber.name})`,
     );

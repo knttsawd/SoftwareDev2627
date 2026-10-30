@@ -1,14 +1,10 @@
-<<<<<<< Updated upstream
-import { mkdtempSync, rmSync } from 'node:fs';
-=======
 import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
->>>>>>> Stashed changes
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import request from 'supertest';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { create_app } from '../app.js';
-import { IN_MEMORY_DATABASE } from '../config/constants.js';
+import { IN_MEMORY_DATABASE, LOGIN_ATTEMPTS_PER_ACCOUNT } from '../config/constants.js';
 import { open_database } from '../db/database.js';
 import { VALID_LEARNING_ANSWERS } from './helpers/learning_answers.js';
 import { TEST_SIGNUP } from './helpers/test_accounts.js';
@@ -52,8 +48,6 @@ describe('unknown routes', () => {
   });
 });
 
-<<<<<<< Updated upstream
-=======
 describe('the built website', () => {
   let client_build_path;
 
@@ -86,7 +80,6 @@ describe('the built website', () => {
   });
 });
 
->>>>>>> Stashed changes
 describe('GET /api/auth/check-username', () => {
   it('reports whether the username is free', async () => {
     const before_signup = await request(app).get('/api/auth/check-username').query({ username: 'study_sam' });
@@ -156,6 +149,31 @@ describe('POST /api/auth/login', () => {
 
     expect(wrong_password.status).toBe(401);
     expect(missing_fields.status).toBe(400);
+  });
+
+  it('blocks an account after too many tries, even with the right password', async () => {
+    await sign_up_test_student();
+    for (let attempt = 0; attempt < LOGIN_ATTEMPTS_PER_ACCOUNT; attempt += 1) {
+      await request(app).post('/api/auth/login').send({ email: TEST_SIGNUP.email, password: 'wrong guess' });
+    }
+
+    const right_password = await request(app)
+      .post('/api/auth/login')
+      .send({ email: TEST_SIGNUP.email, password: TEST_SIGNUP.password });
+    const other_account = await request(app).post('/api/auth/login').send({ email: 'other@example.com', password: 'x' });
+
+    expect(right_password.status).toBe(429);
+    expect(right_password.headers['retry-after']).toEqual(expect.any(String));
+    expect(other_account.status).toBe(401);
+  });
+});
+
+describe('security headers', () => {
+  it('are on every response', async () => {
+    const response = await request(app).get('/api/health');
+
+    expect(response.headers['x-content-type-options']).toBe('nosniff');
+    expect(response.headers['x-frame-options']).toBe('SAMEORIGIN');
   });
 });
 
